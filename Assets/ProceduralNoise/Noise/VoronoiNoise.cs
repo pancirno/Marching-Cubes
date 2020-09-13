@@ -1,17 +1,14 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace ProceduralNoiseProject
 {
-
     public enum VORONOI_DISTANCE { EUCLIDIAN, MANHATTAN, CHEBYSHEV };
 
     public enum VORONOI_COMBINATION { D0, D1_D0, D2_D0 };
 
     public class VoronoiNoise : Noise
     {
-
         public VORONOI_DISTANCE Distance { get; set; }
 
         public VORONOI_COMBINATION Combination { get; set; }
@@ -20,7 +17,6 @@ namespace ProceduralNoiseProject
 
         public VoronoiNoise(int seed, float frequency, float amplitude = 1.0f)
         {
-
             Frequency = frequency;
             Amplitude = amplitude;
             Offset = Vector3.zero;
@@ -29,7 +25,6 @@ namespace ProceduralNoiseProject
             Combination = VORONOI_COMBINATION.D1_D0;
 
             Perm = new PermutationTable(1024, int.MaxValue, seed);
-
         }
 
         /// <summary>
@@ -78,7 +73,7 @@ namespace ProceduralNoiseProject
 
                     featurePointX = randomDiffX + cubeX;
 
-                    //5. Find the feature point closest to the evaluation point. 
+                    //5. Find the feature point closest to the evaluation point.
                     //This is done by inserting the distances to the feature points into a sorted list
                     distanceArray = Insert(distanceArray, Distance1(x, featurePointX));
                 }
@@ -135,7 +130,7 @@ namespace ProceduralNoiseProject
                         featurePointX = randomDiffX + cubeX;
                         featurePointY = randomDiffY + cubeY;
 
-                        //5. Find the feature point closest to the evaluation point. 
+                        //5. Find the feature point closest to the evaluation point.
                         //This is done by inserting the distances to the feature points into a sorted list
                         distanceArray = Insert(distanceArray, Distance2(x, y, featurePointX, featurePointY));
                     }
@@ -202,7 +197,7 @@ namespace ProceduralNoiseProject
                             featurePointY = randomDiffY + cubeY;
                             featurePointZ = randomDiffZ + cubeZ;
 
-                            //5. Find the feature point closest to the evaluation point. 
+                            //5. Find the feature point closest to the evaluation point.
                             //This is done by inserting the distances to the feature points into a sorted list
                             distanceArray = Insert(distanceArray, Distance3(x, y, z, featurePointX, featurePointY, featurePointZ));
                         }
@@ -235,7 +230,7 @@ namespace ProceduralNoiseProject
 
         private float Distance2(float p1x, float p1y, float p2x, float p2y)
         {
-            switch(Distance)
+            switch (Distance)
             {
                 case VORONOI_DISTANCE.EUCLIDIAN:
                     return (p1x - p2x) * (p1x - p2x) + (p1y - p2y) * (p1y - p2y);
@@ -269,7 +264,7 @@ namespace ProceduralNoiseProject
 
         private float Combine(Vector3 arr)
         {
-            switch(Combination)
+            switch (Combination)
             {
                 case VORONOI_COMBINATION.D0:
                     return arr[0];
@@ -289,7 +284,7 @@ namespace ProceduralNoiseProject
         /// </summary>
         /// <param name="value">a uniformly distributed random number</param>
         /// <returns>The number of feature points in a cube.</returns>
-        int ProbLookup(float value)
+        private int ProbLookup(float value)
         {
             //Poisson Distribution
             if (value < 0.0915781944272058) return 1;
@@ -310,7 +305,7 @@ namespace ProceduralNoiseProject
         /// </summary>
         /// <param name="arr">The array to insert the value into.</param>
         /// <param name="value">The value to insert into the array.</param>
-        Vector3 Insert(Vector3 arr, float value)
+        private Vector3 Insert(Vector3 arr, float value)
         {
             float temp;
             for (int i = 3 - 1; i >= 0; i--)
@@ -323,8 +318,5 @@ namespace ProceduralNoiseProject
 
             return arr;
         }
-
     }
-
-
 }

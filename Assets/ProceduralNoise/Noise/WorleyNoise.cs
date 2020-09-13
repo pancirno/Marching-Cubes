@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProceduralNoiseProject
 {
     public class WorleyNoise : Noise
     {
-
         private static readonly float[] OFFSET_F = new float[] { -0.5f, 0.5f, 1.5f };
 
         private const float K = 1.0f / 7.0f;
@@ -23,7 +21,6 @@ namespace ProceduralNoiseProject
 
         public WorleyNoise(int seed, float frequency, float jitter, float amplitude = 1.0f)
         {
-
             Frequency = frequency;
             Amplitude = amplitude;
             Offset = Vector3.zero;
@@ -97,7 +94,6 @@ namespace ProceduralNoiseProject
         /// </summary>
         public override float Sample2D(float x, float y)
         {
-
             x = (x + Offset.x) * Frequency;
             y = (y + Offset.y) * Frequency;
 
@@ -150,7 +146,6 @@ namespace ProceduralNoiseProject
                 if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
                 else if (d2 < F1) { F2 = F1; F1 = d2; }
                 else if (d2 < F2) { F2 = d2; }
-
             }
 
             return Combine(F0, F1, F2) * Amplitude;
@@ -161,7 +156,6 @@ namespace ProceduralNoiseProject
         /// </summary>
         public override float Sample3D(float x, float y, float z)
         {
-
             x = (x + Offset.x) * Frequency;
             y = (y + Offset.y) * Frequency;
             z = (z + Offset.z) * Frequency;
@@ -198,9 +192,8 @@ namespace ProceduralNoiseProject
             {
                 for (int j = 0; j < 3; j++)
                 {
-
-                    px = Perm[(int)pX[i], (int)pY[j], Pi2 - 1]; 
-                    py = Perm[(int)pX[i], (int)pY[j], Pi2]; 
+                    px = Perm[(int)pX[i], (int)pY[j], Pi2 - 1];
+                    py = Perm[(int)pX[i], (int)pY[j], Pi2];
                     pz = Perm[(int)pX[i], (int)pY[j], Pi2 + 1];
 
                     oxx = Frac(px * K) - Ko;

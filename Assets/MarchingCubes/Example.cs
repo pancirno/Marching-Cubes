@@ -1,34 +1,30 @@
-﻿using UnityEngine;
+﻿using ProceduralNoiseProject;
 using System.Collections.Generic;
-
-using ProceduralNoiseProject;
+using UnityEngine;
 
 namespace MarchingCubesProject
 {
-
-    public enum MARCHING_MODE {  CUBES, TETRAHEDRON };
+    public enum MARCHING_MODE { CUBES, TETRAHEDRON };
 
     public class Example : MonoBehaviour
     {
-
         public Material m_material;
 
         public MARCHING_MODE mode = MARCHING_MODE.CUBES;
 
         public int seed = 0;
 
-        List<GameObject> meshes = new List<GameObject>();
+        private List<GameObject> meshes = new List<GameObject>();
 
         void Start()
         {
-
             INoise perlin = new PerlinNoise(seed, 2.0f);
             FractalNoise fractal = new FractalNoise(perlin, 3, 1.0f);
 
             //Set the mode used to create the mesh.
             //Cubes is faster and creates less verts, tetrahedrons is slower and creates more verts but better represents the mesh surface.
             Marching marching = null;
-            if(mode == MARCHING_MODE.TETRAHEDRON)
+            if (mode == MARCHING_MODE.TETRAHEDRON)
                 marching = new MarchingTertrahedron();
             else
                 marching = new MarchingCubes();
@@ -78,7 +74,6 @@ namespace MarchingCubesProject
 
             for (int i = 0; i < numMeshes; i++)
             {
-
                 List<Vector3> splitVerts = new List<Vector3>();
                 List<int> splitIndices = new List<int>();
 
@@ -111,14 +106,11 @@ namespace MarchingCubesProject
 
                 meshes.Add(go);
             }
-
         }
 
         void Update()
         {
             transform.Rotate(Vector3.up, 10.0f * Time.deltaTime);
         }
-
     }
-
 }

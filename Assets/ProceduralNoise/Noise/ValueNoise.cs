@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ProceduralNoiseProject
 {
-
     /// <summary>
     /// Simple noise implementation by interpolating random values.
     /// Works same as Perlin noise but uses the values instead of gradients.
     /// Perlin noise uses gradients as it makes better noise but this still
-   ///  looks good and might be a little faster.
+    ///  looks good and might be a little faster.
     /// </summary>
-	public class ValueNoise : Noise
-	{
-
+    public class ValueNoise : Noise
+    {
         private PermutationTable Perm { get; set; }
 
-        public ValueNoise(int seed, float frequency, float amplitude = 1.0f) 
+        public ValueNoise(int seed, float frequency, float amplitude = 1.0f)
         {
-
             Frequency = frequency;
             Amplitude = amplitude;
             Offset = Vector3.zero;
 
             Perm = new PermutationTable(1024, 255, seed);
-
         }
 
         /// <summary>
@@ -103,7 +97,6 @@ namespace ProceduralNoiseProject
         /// </summary>
         public override float Sample3D(float x, float y, float z)
         {
-
             x = (x + Offset.x) * Frequency;
             y = (y + Offset.y) * Frequency;
             z = (z + Offset.z) * Frequency;
@@ -151,15 +144,14 @@ namespace ProceduralNoiseProject
             return n * Amplitude;
         }
 
-        private float FADE(float t) { return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); }
+        private float FADE(float t)
+        {
+            return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
+        }
 
-        private float LERP(float t, float a, float b) { return a + t * (b - a); }
-
-	}
-
+        private float LERP(float t, float a, float b)
+        {
+            return a + t * (b - a);
+        }
+    }
 }
-
-
-
-
-

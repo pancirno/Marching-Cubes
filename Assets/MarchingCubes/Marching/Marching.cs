@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -8,7 +6,6 @@ namespace MarchingCubesProject
 {
     public abstract class Marching : IMarching
     {
-
         public float Surface { get; set; }
 
         private float[] Cube { get; set; }
@@ -27,7 +24,6 @@ namespace MarchingCubesProject
 
         public virtual void Generate(IList<float> voxels, int width, int height, int depth, IList<Vector3> verts, IList<int> indices)
         {
-
             if (Surface > 0.0f)
             {
                 WindingOrder[0] = 0;
@@ -64,10 +60,9 @@ namespace MarchingCubesProject
                     }
                 }
             }
-
         }
 
-         /// <summary>
+        /// <summary>
         /// MarchCube performs the Marching algorithm on a single cube
         /// </summary>
         protected abstract void March(float x, float y, float z, float[] cube, IList<Vector3> vertList, IList<int> indexList);
@@ -83,16 +78,14 @@ namespace MarchingCubesProject
         }
 
         /// <summary>
-        /// VertexOffset lists the positions, relative to vertex0, 
+        /// VertexOffset lists the positions, relative to vertex0,
         /// of each of the 8 vertices of a cube.
         /// vertexOffset[8][3]
         /// </summary>
         protected static readonly int[,] VertexOffset = new int[,]
-	    {
-	        {0, 0, 0},{1, 0, 0},{1, 1, 0},{0, 1, 0},
-	        {0, 0, 1},{1, 0, 1},{1, 1, 1},{0, 1, 1}
-	    };
-
+        {
+            {0, 0, 0},{1, 0, 0},{1, 1, 0},{0, 1, 0},
+            {0, 0, 1},{1, 0, 1},{1, 1, 1},{0, 1, 1}
+        };
     }
-
 }

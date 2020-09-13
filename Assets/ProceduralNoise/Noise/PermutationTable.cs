@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ProceduralNoiseProject
 {
     internal class PermutationTable
     {
-
         public int Size { get; private set; }
-
         public int Seed { get; private set; }
-
         public int Max { get; private set; }
-
         public float Inverse { get; private set; }
-
         private int Wrap;
-
         private int[] Table;
 
         internal PermutationTable(int size, int max, int seed)
@@ -36,7 +29,7 @@ namespace ProceduralNoiseProject
 
             System.Random rnd = new System.Random(Seed);
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 Table[i] = rnd.Next();
             }
@@ -65,6 +58,5 @@ namespace ProceduralNoiseProject
                 return Table[(k + Table[(j + Table[i & Wrap]) & Wrap]) & Wrap] & Max;
             }
         }
-
     }
 }
