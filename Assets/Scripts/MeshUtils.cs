@@ -7,24 +7,22 @@ using UnityEngine;
 
 public class MeshUtils
 {
-    static public void WeldVertices(List<Vector3> verts, List<int> indices)
+    static public List<Vector3> WeldVertices(List<Vector3> verts, List<int> indicesToUpdate)
     {
-        var distinctVerts = verts.Distinct().ToArray();
+        var distinctVerts = verts.Distinct().ToList();
         Dictionary<Vector3, int> verticeDict = new Dictionary<Vector3, int>();
 
-        for(int vertId = 0; vertId < distinctVerts.Length; vertId++)
+        for(int vertId = 0; vertId < distinctVerts.Count; vertId++)
         {
             verticeDict[distinctVerts[vertId]] = vertId;
         }
 
-        Parallel.For(0, indices.Count, (i) =>
+        for(int i = 0; i < indicesToUpdate.Count; i++)
         {
-            Vector3 vert = verts[indices[i]];
-            indices[i]   = verticeDict[vert];
-        });
+            Vector3 vert = verts[indicesToUpdate[i]];
+            indicesToUpdate[i] = verticeDict[vert];
+        }
 
-        verts.Clear();
-        verts.Capacity = distinctVerts.Length;
-        verts.AddRange(distinctVerts);
+        return distinctVerts;
     }
 }

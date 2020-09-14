@@ -1,5 +1,4 @@
-﻿using Assets.MarchingCubes;
-using ProceduralNoiseProject;
+﻿using ProceduralNoiseProject;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -64,60 +63,31 @@ namespace MarchingCubesProject
             List<Vector3> verts = new List<Vector3>();
             List<int> indices   = new List<int>();
 
-            //The mesh produced is not optimal. There is one vert for each index.
+            System.Diagnostics.Stopwatch measure = new System.Diagnostics.Stopwatch();
+            measure.Start();
+
             marching.Generate(voxels, width, height, length, verts, indices);
 
-            //A mesh in unity can only be made up of 65000 verts.
-            //Need to split the verts between multiple meshes.
+            verts = MeshUtils.WeldVertices(verts, indices);
 
-            int maxVertsPerMesh = 30000; //must be divisible by 3, ie 3 verts == 1 triangle
-            int numMeshes = verts.Count / maxVertsPerMesh + 1;
+            measure.Stop();
 
-            ExampleMeshData[] meshList = new ExampleMeshData[numMeshes];
+            Debug.Log(string.Format("Time elapsed: {0}", measure.Elapsed));
 
-            Parallel.For(0, numMeshes, (i) =>
-            {
-                meshList[i] = new ExampleMeshData();
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.SetVertices(verts);
+            mesh.SetTriangles(indices, 0);
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
 
-                for (int j = 0; j < maxVertsPerMesh; j++)
-                {
-                    int idx = i * maxVertsPerMesh + j;
-
-                    if (idx < verts.Count)
-                    {
-                        meshList[i].Verts.Add(verts[idx]);
-                        meshList[i].Indices.Add(j);
-                    }
-                }
-
-                if (meshList[i].Verts.Count == 0)
-                {
-                    meshList[i] = null;
-                    return;
-                }
-
-                MeshUtils.WeldVertices(meshList[i].Verts, meshList[i].Indices);
-            });
-
-            foreach(ExampleMeshData meshData in meshList)
-            {
-                if (meshData != null)
-                {
-                    Mesh mesh = new Mesh();
-                    mesh.SetVertices(meshData.Verts);
-                    mesh.SetTriangles(meshData.Indices, 0);
-                    mesh.RecalculateBounds();
-                    mesh.RecalculateNormals();
-
-                    GameObject go = new GameObject("Mesh");
-                    go.transform.parent = transform;
-                    go.AddComponent<MeshFilter>();
-                    go.AddComponent<MeshRenderer>();
-                    go.GetComponent<Renderer>().material = m_material;
-                    go.GetComponent<MeshFilter>().mesh = mesh;
-                    go.transform.localPosition = new Vector3(-width / 2, -height / 2, -length / 2);
-                }
-            }
+            GameObject go = new GameObject("Mesh");
+            go.transform.parent = transform;
+            go.AddComponent<MeshFilter>();
+            go.AddComponent<MeshRenderer>();
+            go.GetComponent<Renderer>().material = m_material;
+            go.GetComponent<MeshFilter>().mesh = mesh;
+            go.transform.localPosition = new Vector3(-width / 2, -height / 2, -length / 2);
         }
 
         void Update()
